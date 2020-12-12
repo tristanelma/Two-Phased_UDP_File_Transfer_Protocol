@@ -1,6 +1,6 @@
 # Two-Phased UDP File Transfer Protocol
 
-UDP client and server socket code for fast, reliable file transfer across a network. Protocol designed by Tristan Elma in Fall 2020 for EE 542 at USC (Internet and Cloud Computing), instructed by Prof. Young Cho.
+UDP client and server socket code for fast, reliable file transfer across a network. Protocol designed by Tristan Elma in Fall 2020.
 
 ---
 
