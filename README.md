@@ -2,6 +2,8 @@
 
 UDP client and server socket code for fast, reliable file transfer across a network. Protocol designed by Tristan Elma in Fall 2020.
 
+**Youtube video explanation and demonstration:** https://youtu.be/j4CCr-on7IQ
+
 ---
 
 ## Protocol
