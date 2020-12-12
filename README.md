@@ -7,13 +7,9 @@ UDP client and server socket code for fast, reliable file transfer across a netw
 ## Protocol
 
 1. Client requests service from the server
-2. Server responds with size of file to be transmitted
-i. Client sends acknowledgement
-ii. When done, server signals beginning of next phase
-3. Single-threaded “best-effort phase”
-i. When done, server signals beginning of next phase
-4. Multi-threaded “resend phase”
-i. When done, client signals that transfer is complete
+2. Server responds with size of file to be transmitted and client sends acknowledgement. Once successful, server signals beginning of next phase.
+3. Single-threaded “best-effort phase”. When done, server signals beginning of next phase.
+4. Multi-threaded “resend phase”. When done, client signals that transfer is complete.
 
 ### Best-effort phase
 The general idea is to send packets from the server to the client as fast as possible, with no acknowledgements from client. In the code, there are parameters in `#define` constants to configure redundancy and also for performing the best-effort phase multiple times in a row before moving to the resend phase, but the best performance is typically attained with no redundancy (`BEST_EFFORT_REDUNDANCY = 1`). Throughout the best-effort phase, the client updates a char array of 0’s and 1’s, signifying which packets it has successfully received. The client loops constantly and receives packets as they arrive. When a packet arrives, it updates the char array index for that packet to 1 based on its ID. When a packet arrives, it stores the incoming data in a buffer, which will eventually comprise the entire file.
