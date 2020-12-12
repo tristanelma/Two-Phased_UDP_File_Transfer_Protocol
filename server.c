@@ -12,7 +12,7 @@
 #include <sys/wait.h>
 
 //Arbitrary constants to tweak to improve performance
-#define PACKET_DATA_SIZE 1400
+#define PACKET_DATA_SIZE 8888
 #define SIGNAL_PACKET_SPACING_MIRCO 75
 #define SIGNAL_REDUNDANCY 20
 #define BEST_EFFORT_PACKET_SPACING_MIRCO 50

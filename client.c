@@ -8,7 +8,7 @@
 #include <sys/mman.h>
 
 //Arbitrary constants to tweak to improve performance
-#define PACKET_DATA_SIZE 1400
+#define PACKET_DATA_SIZE 8888
 #define SIGNAL_REDUNDANCY 10
 #define SIGNAL_PACKET_SPACING_MIRCO 75
 #define RESEND_PACKET_SPACING_MIRCO 75
@@ -63,8 +63,8 @@ int main(int argc, char **argv){
         }
     }
     //Allocate a buffer to write to, rather than directly to the disk
-    void *global_buff = mmap(NULL, my_data_info.file_size+1, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    memset(global_buff, 0, my_data_info.file_size);
+    void *global_buff = mmap(NULL, my_data_info.num_packets*PACKET_DATA_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    memset(global_buff, 0, my_data_info.num_packets*PACKET_DATA_SIZE);
     void *global_buff_flags = mmap(NULL, my_data_info.num_packets+1, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     memset(global_buff_flags, 0, my_data_info.num_packets+1);
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
         //Receive packet from server and write data to packet struct
         recvfrom(my_socket, &my_packet, sizeof(my_packet), 0, NULL, NULL);
         printf("Received packet ID %d of %d\n", my_packet.id, my_data_info.num_packets);
-        if(my_packet.id > 0){
+        if((my_packet.id > 0) && (my_packet.id <= my_data_info.num_packets)){
             memcpy(global_buff+((my_packet.id-1)*PACKET_DATA_SIZE), &my_packet.data, sizeof(my_packet.data));
             memset(global_buff_flags+my_packet.id, 1, 1);
         }
@@ -95,7 +95,6 @@ int main(int argc, char **argv){
 
     void *global_end_signal = mmap(NULL, 4, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     memset(global_end_signal, 0, 4);
-
 
 
 
